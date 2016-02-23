@@ -45,7 +45,9 @@ function fetchData(forecast) {
 		country = forecast.city.country;
 		html += '<h3> Weather forecast for ' + cityName + ', ' + country + '</h3>';
 		forecast.list.forEach(function(forecastEntry, index, list){
-			html += '<h4>' + forecastEntry.main.temp + ' &deg' + tempType + ', with ' + forecastEntry.weather[0].description + '.</h4><p id="time">' + forecastEntry.dt_txt + '<p>'
+			html += '<div class="col-md-3">' + forecastEntry.main.temp + ' &deg' + tempType + '<br />' 
+			+ '<img src="http://openweathermap.org/img/w/' + forecastEntry.weather[0].icon + '.png" />' + '<br />'	
+			+ forecastEntry.weather[0].description + '<p id="time">' + forecastEntry.dt_txt + '<p></div>';
 		});
 	$('#results').html(html);
 };
