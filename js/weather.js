@@ -1,6 +1,7 @@
 'use strict';
 
-var openWeatherAppId = '312a556e7bcb74eec3df243532b1ccd7', openWeatherUrl = 'http://api.openweathermap.org/data/2.5/forecast';
+var openWeatherAppId = '312a556e7bcb74eec3df243532b1ccd7';
+var openWeatherUrl = 'http://api.openweathermap.org/data/2.5/forecast';
 // On document ready we map the button presses to the prepare data function and pass the unit that's pressed
 // Used celsius and fahrenheit on buttons names because it's easier to use, but the unit needs to be in metric or imperial for the API
 var tempType;
@@ -22,10 +23,10 @@ var prepareData = function(units) {
 		cityName = cityName.trim();
 		getData(openWeatherUrl, cityName, openWeatherAppId, units);
 	} else {
-		console.log('City name empty');
+		$('#error').html('City name empty');
 	};
 };
-
+// Function that does a GET request for the json data
 function getData(url, cityName, appId, units) {
 	var request = $.ajax({
 		url: url,
@@ -35,22 +36,22 @@ function getData(url, cityName, appId, units) {
 		type: 'GET'
 	}).fail(function(error){
 		console.log(error);
+		$('#error').html('Look up failed'); 
 	});
 };
-
+//Function to present the HTML data
 function fetchData(forecast) {
-	//console.log(forecast);
+	// Clears any previous errors
+	$('#error').html('');
+	//console.log(forecast); Used previously while debugging, keeping it in for now
 	var html = '',
 		cityName = forecast.city.name,
 		country = forecast.city.country;
-		html += '<h3>72 hour weather forecast for ' + cityName + ', ' + country + '</h3>';
+		html += '<h3 id="forecastCity">Weather forecast for ' + cityName + ', ' + country + '</h3>';
 		forecast.list.forEach(function(forecastEntry, index, list){
 			var date = new Date(forecastEntry.dt_txt + ' UTC');
 			var stringDate = date.toString();
 			var cleanDate = stringDate.substring(0,21);
-
-//			Thu Feb 25 2016 19:00 20
-
 			html += '<div class="col-md-2">' + cleanDate + '<br /><h3>' 
 			+ forecastEntry.main.temp + ' &deg' + tempType + '</h3><br />' 
 			+ '<img id="weatherIcon" src="http://openweathermap.org/img/w/' + forecastEntry.weather[0].icon + '.png" />' + '<br />'	
