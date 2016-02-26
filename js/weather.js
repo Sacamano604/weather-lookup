@@ -39,15 +39,22 @@ function getData(url, cityName, appId, units) {
 };
 
 function fetchData(forecast) {
-	console.log(forecast);
+	//console.log(forecast);
 	var html = '',
 		cityName = forecast.city.name,
 		country = forecast.city.country;
-		html += '<h3> Weather forecast for ' + cityName + ', ' + country + '</h3>';
+		html += '<h3>72 hour weather forecast for ' + cityName + ', ' + country + '</h3>';
 		forecast.list.forEach(function(forecastEntry, index, list){
-			html += '<div class="col-md-3">' + forecastEntry.main.temp + ' &deg' + tempType + '<br />' 
-			+ '<img src="http://openweathermap.org/img/w/' + forecastEntry.weather[0].icon + '.png" />' + '<br />'	
-			+ forecastEntry.weather[0].description + '<p id="time">' + forecastEntry.dt_txt + '<p></div>';
+			var date = new Date(forecastEntry.dt_txt + ' UTC');
+			var stringDate = date.toString();
+			var cleanDate = stringDate.substring(0,21);
+
+//			Thu Feb 25 2016 19:00 20
+
+			html += '<div class="col-md-2">' + cleanDate + '<br /><h3>' 
+			+ forecastEntry.main.temp + ' &deg' + tempType + '</h3><br />' 
+			+ '<img id="weatherIcon" src="http://openweathermap.org/img/w/' + forecastEntry.weather[0].icon + '.png" />' + '<br />'	
+			+ forecastEntry.weather[0].description + '</div>';
 		});
 	$('#results').html(html);
 };
